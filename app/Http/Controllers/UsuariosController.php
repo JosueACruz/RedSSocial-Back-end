@@ -42,10 +42,11 @@ class UsuariosController extends Controller
     {
         //Instanceamos la clase Usuarios (de nuestro modelo)
         
+
         $usuarios = new Usuarios();
-        $usuarios -> nombre = $request->get('nombre');
-        $usuarios -> username = $request->get('username');
-        $usuarios -> pass = $request->get('pass');
+        $usuarios -> nombre = $request->input('nombre');
+        $usuarios -> username = $request->input('username');
+        $usuarios -> pass = $request->input('pass');
         $usuarios -> save();
         return response()->json($usuarios);
 //        return('usuario')->with('success', 'Usuario creado exitosamente');
