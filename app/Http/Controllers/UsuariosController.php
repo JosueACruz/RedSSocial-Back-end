@@ -47,8 +47,11 @@ class UsuariosController extends Controller
         $usuarios -> username = $request->input('username');
         $usuarios -> pass = $request->input('pass');
         $usuarios -> token = $token;
+        $tok = [
+            'token' => $token
+        ];
         $usuarios -> save();
-        return response()->json($usuarios);
+        return response()->json($tok);
 //        return('usuario')->with('success', 'Usuario creado exitosamente');
     }
 

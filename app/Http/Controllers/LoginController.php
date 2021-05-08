@@ -59,7 +59,7 @@ class LoginController extends Controller
                     ->where('pass', $pass)
                     ->update($tok,['upsert' => true]);
             //Devolvemos el token al front
-            $res = $tok;
+            $res = $token;
         }
         return response()->json($res);
     }
