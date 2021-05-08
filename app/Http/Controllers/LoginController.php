@@ -46,7 +46,7 @@ class LoginController extends Controller
                         ->where('pass', $pass)
                         ->get();
         if($usuario->isEmpty()){
-            $res = 'NO existe el usuario'; 
+            $res = 'NO existe el usuario';
         }
         else if($usuario->isNotEmpty()){
             //Si el usuario existe creamos el token y lo pasamos a un array
@@ -59,7 +59,7 @@ class LoginController extends Controller
                     ->where('pass', $pass)
                     ->update($tok,['upsert' => true]);
             //Devolvemos el token al front
-            $res = $token;
+            $res = $tok;
         }
         return response()->json($res);
     }
