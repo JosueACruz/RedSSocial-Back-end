@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Usuarios;
+use App\Usuarios;               //Que use el modelo Usuarios
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
+use Illuminate\Support\Str;     //Esto es para generar un string aleatorio como token
 
-class UsuariosController extends Controller
+class LoginController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,8 +16,7 @@ class UsuariosController extends Controller
     public function index()
     {
         //
-        $usuarios = Usuarios::all();
-        return compact('usuarios');
+        
     }
 
     /**
@@ -28,8 +27,6 @@ class UsuariosController extends Controller
     public function create()
     {
         //
-        //return view('usuariocreate');
-        return view('usuarios.create');
     }
 
     /**
@@ -40,16 +37,31 @@ class UsuariosController extends Controller
      */
     public function store(Request $request)
     {
-        $token = Str::random(80);
-        //Instanceamos la clase Usuarios (de nuestro modelo)
-        $usuarios = new Usuarios();
-        $usuarios -> nombre = $request->input('nombre');
-        $usuarios -> username = $request->input('username');
-        $usuarios -> pass = $request->input('pass');
-        $usuarios -> token = $token;
-        $usuarios -> save();
-        return response()->json($usuarios);
-//        return('usuario')->with('success', 'Usuario creado exitosamente');
+        $response = "";
+        //Extraemos los datos de la peticion (Enviados por el front)
+        $username = $request->input('username');
+        $pass = $request->input('pass');
+        //Buscamos el Usuario en la Base de datos
+        $usuario = Usuarios::where('username', $username)
+                        ->where('pass', $pass)
+                        ->get();
+        if($usuario->isEmpty()){
+            $res = 'NO existe el usuario'; 
+        }
+        else if($usuario->isNotEmpty()){
+            //Si el usuario existe creamos el token y lo pasamos a un array
+            $token = Str::random(80);
+            $tok = [
+                'token' => $token
+            ];
+            //Ingresamos el token en la base de datos
+            $user = Usuarios::where('username', $username)
+                    ->where('pass', $pass)
+                    ->update($tok,['upsert' => true]);
+            //Devolvemos el token al front
+            $res = $token;
+        }
+        return response()->json($res);
     }
 
     /**
@@ -60,7 +72,7 @@ class UsuariosController extends Controller
      */
     public function show($id)
     {
-        return Usuarios::find($id);
+        //
     }
 
     /**
@@ -72,8 +84,6 @@ class UsuariosController extends Controller
     public function edit($id)
     {
         //
-        $usuarios = Usuarios::findOrFail($id);
-        return compact('usuarios');
     }
 
     /**
@@ -86,14 +96,6 @@ class UsuariosController extends Controller
     public function update(Request $request, $id)
     {
         //
-        $usuarios = Usuarios::find($id);
-        $usuarios->update($request->all());
-        return ('Usuario actualizado');
-
-        /**$usuarios -> nombre = $request->get('nombre');
-        $usuarios -> username = $request->get('username');
-        $usuarios -> pass = $request->get('pass');
-        $usuarios->save(); */
     }
 
     /**
@@ -102,12 +104,8 @@ class UsuariosController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-
-    //Este ya funciona para eliminar un Usuario
     public function destroy($id)
     {
         //
-        Usuarios::destroy($id);
-        return ('Destroy Id');
     }
 }

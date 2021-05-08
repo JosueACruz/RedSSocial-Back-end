@@ -15,6 +15,6 @@ class Usuarios extends Eloquent
     
     //Estos son los campos que estaran dentrod de la coleccion
     protected $fillable = [
-        'nombre', 'username','pass'
+        'nombre', 'username','pass', 'token'
     ];
 }
