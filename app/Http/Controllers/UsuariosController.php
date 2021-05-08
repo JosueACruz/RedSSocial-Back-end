@@ -51,7 +51,7 @@ class UsuariosController extends Controller
             'token' => $token
         ];
         $usuarios -> save();
-        return response()->json($tok);
+        return response()->json($token);
 //        return('usuario')->with('success', 'Usuario creado exitosamente');
     }
 
