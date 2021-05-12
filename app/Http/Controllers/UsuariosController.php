@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Usuarios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Storage;
 
 class UsuariosController extends Controller
 {
@@ -83,15 +84,28 @@ class UsuariosController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $token
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $token)
     {
         //
-        $usuarios = Usuarios::find($id);
-        $usuarios->update($request->all());
+        $imagen = $request -> File('Image')->store('public/userImages');
+        $url = Storage::url($imagen); //Con esto cambiamos la direccion que se enviara a la BD de (/public) a (/Storage) para verla despues
+        $ale = array(
+            "nombre"=>$request->get('nombre'),
+            "username"=>$request->get('username'),
+            "pass"=>$request->get('pass'),
+            "ImageProfile" => $url 
+        );
+        $usuarios=Usuarios::where("token",$token)
+            ->update($ale);
+
+       // $usuarios = Usuarios::where("token",$token)
+            //->update($request->all());
         return ('Usuario actualizado');
+
+        
 
         /**$usuarios -> nombre = $request->get('nombre');
         $usuarios -> username = $request->get('username');

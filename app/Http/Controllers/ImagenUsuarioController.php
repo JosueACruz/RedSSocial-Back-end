@@ -84,10 +84,6 @@ class ImagenUsuarioController extends Controller
         //Aqui paso de la carpeta temporal donde se guardan las imagenes a la carpeta /storage/app
         $imagen = $request -> File('Image')->store('public/userImages');
         $url = Storage::url($imagen); //Con esto cambiamos la direccion que se enviara a la BD de (/public) a (/Storage) para verla despues
-        //return $url;
-        //$usuarios = Usuarios::where("token",$token);
-       // $usuarios -> ImageProfile = $url;
-        //$usuarios->update();
         $ale = array(
             "ImageProfile" => $url 
         );
