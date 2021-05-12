@@ -73,10 +73,10 @@ class ImagenUsuarioController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $token
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $token)
     {
 //        dd($request->file('image'));
         //
@@ -85,9 +85,14 @@ class ImagenUsuarioController extends Controller
         $imagen = $request -> File('Image')->store('public/userImages');
         $url = Storage::url($imagen); //Con esto cambiamos la direccion que se enviara a la BD de (/public) a (/Storage) para verla despues
         //return $url;
-        $usuarios = Usuarios::find($id);
-        $usuarios -> ImageProfile = $url;
-        $usuarios->update();
+        //$usuarios = Usuarios::where("token",$token);
+       // $usuarios -> ImageProfile = $url;
+        //$usuarios->update();
+        $ale = array(
+            "ImageProfile" => $url 
+        );
+        $usuarios=Usuarios::where("token",$token)
+            ->update($ale);
         return ($url);
     }
 
