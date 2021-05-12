@@ -22,4 +22,6 @@ Route::resource('usuarios', "UsuariosController");
 Route::resource('login', "LoginController");
 Route::resource('/token', "usuariosporTokenController");
 Route::resource('/UserImage', "ImagenUsuarioController");
+Route::resource('/Publication', "PublicationController");
+
 //Route::put('')
