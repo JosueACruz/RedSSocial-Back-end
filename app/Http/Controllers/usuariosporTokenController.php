@@ -1,5 +1,5 @@
 <?php
-
+//Este controlador es para el index, para extraer todos los datos del usuario por medio del token
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;

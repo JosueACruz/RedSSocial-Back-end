@@ -90,12 +90,23 @@ class LoginController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $token
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+
+    //Este metodo usaremos para el logout
+    public function update(Request $request, $token)
     {
         //
+        $tok = [
+            'token' => 'SinSesionActiva'
+        ];
+        //Ingresamos el nuevo valor de token en la base de datos
+        $user = Usuarios::where('token', $token)
+            ->update($tok,['upsert' => true]);
+        //Devolvemos una respuesta al front
+        $res = $token;
+        return response()->json(["message" => "Sesion cerrada"]);
     }
 
     /**
@@ -104,8 +115,10 @@ class LoginController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
     public function destroy($id)
     {
         //
+
     }
 }
