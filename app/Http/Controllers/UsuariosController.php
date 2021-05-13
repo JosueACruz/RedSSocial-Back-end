@@ -47,6 +47,7 @@ class UsuariosController extends Controller
         $usuarios -> nombre = $request->input('nombre');
         $usuarios -> username = $request->input('username');
         $usuarios -> pass = $request->input('pass');
+        $usuarios -> email = $request->input('email');
         $usuarios -> token = $token;
         $tok = [
             'token' => $token
@@ -90,16 +91,18 @@ class UsuariosController extends Controller
     public function update(Request $request, $token)
     {
         //
-        $imagen = $request -> File('Image')->store('public/userImages');
-        $url = Storage::url($imagen); //Con esto cambiamos la direccion que se enviara a la BD de (/public) a (/Storage) para verla despues
+        //$imagen = $request -> File('Image')->store('public/userImages');
+        //$url = Storage::url($imagen); //Con esto cambiamos la direccion que se enviara a la BD de (/public) a (/Storage) para verla despues
         $ale = array(
-            "nombre"=>$request->get('nombre'),
-            "username"=>$request->get('username'),
-            "pass"=>$request->get('pass'),
-            "ImageProfile" => $url 
+            "nombre"=>$request->input('nombre'),
+            "username"=>$request->input('username'),
+            "pass"=>$request->input('pass'),
+            "email"=>$request->input('email')
+            //"ImageProfile" => $url 
         );
         $usuarios=Usuarios::where("token",$token)
-            ->update($ale);
+            ->update($request->all());
+            //->update($ale,['upsert'=>true]);
 
        // $usuarios = Usuarios::where("token",$token)
             //->update($request->all());
