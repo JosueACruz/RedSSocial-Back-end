@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Usuarios;
+use App\Publication;
+
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 class PublicationController extends Controller
 {
@@ -16,16 +20,8 @@ class PublicationController extends Controller
     //
     public function index()
     {
-        //
-        //$usuario = Usuarios::get('Publication')->toArray();
-        //return $usuario;
-        //$usuarios = Usuarios::where('usuarios.publication', true)
-        //            ->get('publication');
-        //return $usuarios;
-        $usuarios = Usuarios::where('publication','exists', true)
-                    ->get();
-        
-    return $usuarios;
+        $publications = Publication::all();
+        return $publications;
     }
 
     /**
@@ -48,18 +44,27 @@ class PublicationController extends Controller
     //Ingresar una nueva publicacion por el usuario
     public function store(Request $request)
     {
+        $imagen = $request -> File('Image')->store('public/publicationsImages');
+        $url = Storage::url($imagen);
+
         //Primero extraemos el login del usuario que ha iniciado sesion
         $tokenUser = $request->get('token');
-        //Creamos un array con los datos de la publicacion
-        $Publication = array(
-            "name"=>$request->get('title'),
+        //Aqui hacemos un get de un usuario especifico por medio del token en la url
+        $usuarios = Usuarios::where('token', $tokenUser )
+                    ->get()->pluck('_id')->toArray();
+        $idUsuario = $usuarios[0];
+        
+        // //Creamos un array con los datos de la publicacion
+        $PublicArray = array(
+            "title"=>$request->get('title'),
             "description"=>$request->get('description'),
+            "image"=>$url,
+            "userID"=>$idUsuario
         );
-        //Insertamos la publicacion dentro de la base de datos
-        $usuario = Usuarios::where('token', $tokenUser)
-                    ->push('publication', $Publication);
+        $publicacion = Publication::create($PublicArray);
         return ('Publicacion creada');
     }
+
     /**
      * Display the specified resource.
      *
