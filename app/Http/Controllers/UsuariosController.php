@@ -97,16 +97,14 @@ class UsuariosController extends Controller
             "nombre"=>$request->input('nombre'),
             "username"=>$request->input('username'),
             "pass"=>$request->input('pass'),
-            "email"=>$request->input('email')
+            "email"=>$request->input('email'),
+            "webSite"=>$request->input('webSite'),
+            "desc"=>$request->input('desc')
             //"ImageProfile" => $url 
         );
         $usuarios=Usuarios::where("token",$token)
-            ->update($request->all());
-            //->update($ale,['upsert'=>true]);
-
-       // $usuarios = Usuarios::where("token",$token)
-            //->update($request->all());
-        return ('Usuario actualizado');
+            ->update($ale);
+        return response()->json(['message'=>'Usuario Actualizado',$ale]);
 
         
 
