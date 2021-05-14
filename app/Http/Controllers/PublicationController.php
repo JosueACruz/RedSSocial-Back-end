@@ -63,7 +63,8 @@ class PublicationController extends Controller
             "username"=>$username
         );
         $publicacion = Publication::create($PublicArray);
-        return ('Publicacion creada');
+       // return ('Publicacion creada');
+        return response()->json(['message'=>'Publicacion creada']);
     }
 
     /**

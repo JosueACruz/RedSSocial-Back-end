@@ -102,13 +102,7 @@ class UsuariosController extends Controller
             "desc"=>$request->input('desc')
             //"ImageProfile" => $url 
         );
-        $usuarios=Usuarios::where("token",$token)
-            ->update($request->all());
-            //->update($ale,['upsert'=>true]);
-
-        // $usuarios = Usuarios::where("token",$token)
-            //->update($request->all());
-        return ('Usuario actualizado');        
+        $usuarios=Usuarios::where("token",$token)      
             ->update($ale);
         return response()->json(['message'=>'Usuario Actualizado',$ale]);
 
