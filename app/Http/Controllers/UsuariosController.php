@@ -6,6 +6,7 @@ use App\Usuarios;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Arr;
 
 class UsuariosController extends Controller
 {
@@ -93,17 +94,65 @@ class UsuariosController extends Controller
      */
     public function update(Request $request, $token)
     {
-        //
-        //$imagen = $request -> File('Image')->store('public/userImages');
-        //$url = Storage::url($imagen); //Con esto cambiamos la direccion que se enviara a la BD de (/public) a (/Storage) para verla despues
+        $imagen = $request -> File('Image')->store('public/userImages');
+        $url = Storage::url($imagen); //Con esto cambiamos la direccion que se enviara a la BD de (/public) a (/Storage) para verla despues
+
+        //buscamos los datos de la bd primero
+        $usuariosBD = Usuarios::where('token', $token )
+                        ->get();
+        //inicializamos las variables
+        $nombre = "";
+        $username = "";
+        $pass = "";
+        $email = "";
+        $webSite = "";
+        $desc = "";
+        $imagenurl = "";
+        //validacion de los campos
+        if($request->input('nombre') == "undefined"){
+            $nombre = Arr::get($usuariosBD[0], 'nombre');
+        }else{
+            $nombre = $request->input('nombre');
+        }
+        if($request->input('username') == "undefined" ){
+            $username = Arr::get($usuariosBD[0], 'username');
+        }else{
+            $username = $request->input('username');
+        }
+        if($request->input('pass') == "undefined" ){
+            $pass = Arr::get($usuariosBD[0], 'pass');
+        }else{
+            $pass = $request->input('pass');
+        }
+        if($request->input('email') == "undefined"){
+            $email = Arr::get($usuariosBD[0], 'email');
+        }else{
+            $email = $request->input('email');
+        }
+        if($request->input('webSite') == "undefined")
+        {
+            $webSite = Arr::get($usuariosBD[0], 'webSite');
+        }else{
+            $webSite = $request->input('webSite');
+        }
+        if($request->input('desc') == "undefined"){
+            $desc = Arr::get($usuariosBD[0], 'desc');
+        }else{
+            $desc = $request->input('desc');
+        }
+        if($url == ""){
+            $imagenurl = Arr::get($usuariosBD[0], 'ImageProfile');
+        }else{
+            $imagenurl = $url;
+        }
         $ale = array(
-            "nombre"=>$request->input('nombre'),
-            "username"=>$request->input('username'),
-            "pass"=>$request->input('pass'),
-            "email"=>$request->input('email'),
-            "webSite"=>$request->input('webSite'),
-            "desc"=>$request->input('desc')
-            //"ImageProfile" => $url 
+            "nombre"=>$nombre,
+            "username"=>$username,
+            "pass"=>$pass,
+            "email"=>$email,
+            "webSite"=>$webSite,
+            "desc"=>$desc,
+            "ImageProfile" => $imagenurl 
         );
         $usuarios=Usuarios::where("token",$token)      
             ->update($ale);

@@ -89,7 +89,7 @@ class ImagenUsuarioController extends Controller
         );
         $usuarios=Usuarios::where("token",$token)
             ->update($ale);
-        return ($url);
+        return response()->json(['message'=>$url]);
     }
 
     /**
