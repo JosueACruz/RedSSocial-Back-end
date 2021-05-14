@@ -51,16 +51,18 @@ class PublicationController extends Controller
         $tokenUser = $request->get('token');
         //Aqui hacemos un get de un usuario especifico por medio del token en la url
         $usuarios = Usuarios::where('token', $tokenUser )
-                    ->get(['_id', 'username']);
+                    ->get(['_id', 'username','ImageProfile']);
         $idUsuario = Arr::get($usuarios[0], '_id');
         $username = Arr::get($usuarios[0], 'username');
+        $ImageProfile = Arr::get($usuarios[0], 'ImageProfile'); 
         //Creamos un array con los datos de la publicacion
         $PublicArray = array(
             "title"=>$request->get('title'),
             "description"=>$request->get('description'),
             "image"=>$url,
             "userID"=>$idUsuario,
-            "username"=>$username
+            "username"=>$username,
+            "ImageProfile" => $ImageProfile
         );
         $publicacion = Publication::create($PublicArray);
        // return ('Publicacion creada');
