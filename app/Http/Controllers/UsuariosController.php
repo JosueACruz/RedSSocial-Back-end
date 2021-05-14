@@ -104,11 +104,9 @@ class UsuariosController extends Controller
             ->update($request->all());
             //->update($ale,['upsert'=>true]);
 
-       // $usuarios = Usuarios::where("token",$token)
+        // $usuarios = Usuarios::where("token",$token)
             //->update($request->all());
-        return ('Usuario actualizado');
-
-        
+        return ('Usuario actualizado');        
 
         /**$usuarios -> nombre = $request->get('nombre');
         $usuarios -> username = $request->get('username');

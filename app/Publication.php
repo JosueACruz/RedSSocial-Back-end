@@ -14,6 +14,6 @@ class Publication extends Eloquent
     
     //Estos son los campos que estaran dentrod de la coleccion
     protected $fillable = [
-        'title', 'description', 'image', 'likes','userID'
+        'title', 'description', 'image', 'likes','userID', 'username'
     ];
 }

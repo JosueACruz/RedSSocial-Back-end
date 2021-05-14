@@ -51,15 +51,16 @@ class PublicationController extends Controller
         $tokenUser = $request->get('token');
         //Aqui hacemos un get de un usuario especifico por medio del token en la url
         $usuarios = Usuarios::where('token', $tokenUser )
-                    ->get()->pluck('_id')->toArray();
-        $idUsuario = $usuarios[0];
-        
-        // //Creamos un array con los datos de la publicacion
+                    ->get(['_id', 'username']);
+        $idUsuario = Arr::get($usuarios[0], '_id');
+        $username = Arr::get($usuarios[0], 'username');
+        //Creamos un array con los datos de la publicacion
         $PublicArray = array(
             "title"=>$request->get('title'),
             "description"=>$request->get('description'),
             "image"=>$url,
-            "userID"=>$idUsuario
+            "userID"=>$idUsuario,
+            "username"=>$username
         );
         $publicacion = Publication::create($PublicArray);
         return ('Publicacion creada');
@@ -72,11 +73,16 @@ class PublicationController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($token)
-    {
-        //
-        $usuario = Usuarios::where('token', $token)
-                    ->get('publication')->toArray();
-        return response()->json_encode($usuario);
+    {   
+        //Este sirve para consultar las publicaciones del usuario que ha iniciado sesion
+        //Aqui hacemos un get de un usuario especifico por medio del token en la url
+        $usuarios = Usuarios::where('token', $token )
+                    ->get()->pluck('_id')->toArray();
+        $idUsuario = $usuarios[0];
+        //lugo hacemos la peticion a la coleccion de las publicaciones
+        $publicacion = Publication::where('userID', $idUsuario)
+                    ->get();
+        return $publicacion;
     }
 
     /**
