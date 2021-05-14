@@ -60,12 +60,15 @@ class UsuariosController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  string  $username
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($username)
     {
-        return Usuarios::find($id);
+        //Aqui hacemos un get de un usuario especifico por medio del token en la url
+        $usuarios = Usuarios::where('username', $username )
+                            ->get();
+        return response()->json($usuarios);
     }
 
     /**
