@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Usuarios;
+use App\Publication;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Storage;
@@ -100,6 +101,7 @@ class UsuariosController extends Controller
         //buscamos los datos de la bd primero
         $usuariosBD = Usuarios::where('token', $token )
                         ->get();
+        $userID = Arr::get($usuariosBD[0], '_id');
         //inicializamos las variables
         $nombre = "";
         $username = "";
@@ -156,6 +158,13 @@ class UsuariosController extends Controller
         );
         $usuarios=Usuarios::where("token",$token)      
             ->update($ale);
+        
+        $publ = array(
+            "username"=>$username,
+            "ImageProfile"=>$imagenurl
+        );
+        $publicacion=Publication::where("userID",$userID)
+            ->update($publ);
         return response()->json(['message'=>'Usuario Actualizado',$ale]);
 
         
