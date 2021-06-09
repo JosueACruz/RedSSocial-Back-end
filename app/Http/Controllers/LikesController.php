@@ -16,7 +16,12 @@ class LikesController extends Controller
      */
     public function index()
     {
-        //
+        //numero de likes
+        $publ = Publication::where('_id', '60c042f8b20b000062005033')
+                ->get(["likes"]);
+        $lk = Arr::get($publ[0], 'likes');
+        $cant = count($lk);
+        return response() -> json($cant);
     }
 
     /**
