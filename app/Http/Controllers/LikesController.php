@@ -45,14 +45,37 @@ class LikesController extends Controller
                     ->get(['_id', 'username','ImageProfile']);
         $idUsuario = Arr::get($usuarios[0], '_id');
         $username = Arr::get($usuarios[0], 'username');
-        //Insertamos el nuevo like
-        $like = array (
-            "username" => $username
-        );
         $idPublicacion = $request -> get('idPublicacion');
-        $publicacion = Publication::where('_id', $idPublicacion)
-                        ->push('likes', $like);
-        return response() -> json(['message' => 'Like agregado', $publicacion]);
+        //$let = 'likes.'+$username;
+        $publ = Publication::where('_id', $idPublicacion)
+                ->where("likes.username", $username)
+                ->get(["likes.username"]);
+        //Validamos si es un like o dislike
+        if($publ->isEmpty())
+        {
+            //Si aparece vacio significa que el usuario no ha dado un like a esa publlicacion
+            //Insertamos el nuevo like
+            $like = array (
+                "username" => $username
+            );
+
+            $publicacion = Publication::where('_id', $idPublicacion)
+                        ->push('likes', $like, true);
+            $res = ['message' => 'Like agregado', $publicacion];
+    //        return response() -> json(['message' => 'Like agregado', $publicacion]);
+        }
+        else if($publ->isNotEmpty())
+        {
+            //Si tiene datos significa que el usuario ya ha dado like a esa publicacion y quiere dar un dislike
+            $like = array (
+                "username" => $username
+            );
+
+            $publicacion = Publication::where('_id', $idPublicacion)
+                        ->pull('likes', $like, true);
+            $res = ['message' => 'Like eliminado', $publicacion];
+        }
+        return response() -> json($res);
     }
 
     /**
@@ -74,17 +97,17 @@ class LikesController extends Controller
      */
     public function edit($id)
     {
-        //
+        //        
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $token
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $token)
     {
         //
     }
@@ -94,8 +117,9 @@ class LikesController extends Controller
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
+     * @param  \Illuminate\Http\Request  $request
      */
-    public function destroy($id)
+    public function destroy($request)
     {
         //
     }
