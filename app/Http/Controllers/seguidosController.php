@@ -76,7 +76,7 @@ class seguidosController extends Controller
         $valSegui = Usuarios::where('_id', $idUsuario) //buscamos en mi usuario
                 ->get(['seguidos.user', 'seguidos.name', 'seguidos.image']);
         $sd = Arr::get($valSegui[0], 'seguidos');
-        if($sd->isEmpty())
+        if($sd == "")
         {
             $sg = array ("message" => "Sin seguidores");
         }
