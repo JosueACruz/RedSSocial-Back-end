@@ -41,16 +41,28 @@ class SeguidoresController extends Controller
         //
         $token = $request -> get('token');
         $usuarios = Usuarios::where('token', $token )
-                    ->get(['_id', 'username','ImageProfile']);
+                    ->get(['_id', 'username', 'nombre', 'ImageProfile']);
         $idUsuario = Arr::get($usuarios[0], '_id'); //id mio
+        $nombre = Arr::get($usuarios[0], 'nombre'); //nombre mio
+        $ImageProfile = Arr::get($usuarios[0], 'ImageProfile');  //imagen mia
         $username = Arr::get($usuarios[0], 'username'); //username mio
+
+        //Datos del que vamos a seguir
         $usernameSeguido = $request->get('usernameSeg'); //username del que quiero seguir
+        $usuarios2 = Usuarios::where('username', $usernameSeguido)
+                    ->get(['_id', 'nombre','ImageProfile']);
+        $nombreSeguido =Arr::get($usuarios2[0], 'nombre'); //nombre seguido
+        $Imageseguido = Arr::get($usuarios2[0], 'ImageProfile');  //imagen seguido
 
         $follow = array(
-            "user" => $usernameSeguido  //persona a quien vamos a seguir
+            "user" => $usernameSeguido,  //persona a quien vamos a seguir
+            "name" => $nombreSeguido,
+            "image" => $Imageseguido
         );
         $followed = array(
-            "user" => $username     //nosotros
+            "user" => $username,     //nosotros
+            "name" => $nombre,
+            "image" => $ImageProfile
         );
 
         //Consultamos a la base de datos si ya seguimos a este usuario

@@ -74,10 +74,16 @@ class seguidosController extends Controller
     function seguidos1($idUsuario)
     {
         $valSegui = Usuarios::where('_id', $idUsuario) //buscamos en mi usuario
-                ->get(['seguidos.user']);
-        
-        $sg = Arr::get($valSegui[0], 'seguidos'); //este para ver los seguidores
-        $cant = count($sg);                      //este para contarlos
+                ->get(['seguidos.user', 'seguidos.name', 'seguidos.image']);
+        $sd = Arr::get($valSegui[0], 'seguidos');
+        if($sd->isEmpty())
+        {
+            $sg = array ("message" => "Sin seguidores");
+        }
+        else{
+            $sg = $sd;  //este para ver los seguidores
+        }
+        //$cant = count($sg);                      //este para contarlos
         return $sg;
     }
 
@@ -85,10 +91,16 @@ class seguidosController extends Controller
     function seguidores1($idUsuario)
     {
         $valSegui = Usuarios::where('_id', $idUsuario) //buscamos en mi usuario
-                            ->get(['seguidores.user']);
-
-        $sg = Arr::get($valSegui[0], 'seguidores'); //este para ver los seguidores
-        $cant = count($sg);                      //este para contarlos
+                            ->get(['seguidores.user','seguidores.name', 'seguidores.image']);
+        $sd = Arr::get($valSegui[0], 'seguidores');
+        if($sd == "")
+        {
+            $sg = array ("message" => "Sin seguidores");
+        }
+        else{
+             //este para ver los seguidores
+            $sg = $sd;
+        }
         return $sg;
     }
 
@@ -99,7 +111,14 @@ class seguidosController extends Controller
                 ->get(['seguidores.user']);
         
         $sg = Arr::get($valSegui[0], 'seguidores'); //este para ver los seguidores
-        $cant = count($sg);                      //este para contarlos
+        
+        if($sg == "")
+        {
+            $cant = "0";
+        }
+        else{
+            $cant = count($sg);                      //este para contarlos
+        }
         return $cant;
     }
 
@@ -108,9 +127,14 @@ class seguidosController extends Controller
     {
         $valSegui = Usuarios::where('_id', $idUsuario) //buscamos en mi usuario
                 ->get(['seguidos.user']);
-        
         $sg = Arr::get($valSegui[0], 'seguidos'); //este para ver los seguidores
-        $cant = count($sg);                      //este para contarlos
+        if($sg == "")
+        {
+            $cant = "0";
+        }
+        else{
+            $cant = count($sg);                      //este para contarlos
+        }
         return $cant;
     }
     /**
