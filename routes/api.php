@@ -26,6 +26,8 @@ Route::resource('/Publication', "PublicationController"); //ver y crear publicac
 Route::resource('/otrapublication', "OtraPublicacionController"); //listar las publicaciones en el perfil de otro usuario
 Route::resource('/likes', "LikesController"); //agregar y quitar likes
 Route::resource('/seguidores', "SeguidoresController"); //agregar y quitar seguidores
+Route::resource('/seguidos', "SeguidosController"); //agregar y quitar seguidores
+
 
 
 

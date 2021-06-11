@@ -84,15 +84,15 @@ class SeguidoresController extends Controller
 
     /**
      * Display the specified resource.
-     *
-     * @param  int  $id
+     *@param  \Illuminate\Http\Request  $request
+     * @param  string  $username
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Request $request, $username)
     {
         //
     }
-
+    
     /**
      * Show the form for editing the specified resource.
      *
@@ -108,12 +108,11 @@ class SeguidoresController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  string  $username
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $username)
     {
-        //
     }
 
     /**
