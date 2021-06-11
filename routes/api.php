@@ -25,6 +25,8 @@ Route::resource('/UserImage', "ImagenUsuarioController"); //Ingresar la imagen d
 Route::resource('/Publication', "PublicationController"); //ver y crear publicaciones, ver las del usuario logueado
 Route::resource('/otrapublication', "OtraPublicacionController"); //listar las publicaciones en el perfil de otro usuario
 Route::resource('/likes', "LikesController"); //agregar y quitar likes
+Route::resource('/seguidores', "SeguidoresController"); //agregar y quitar seguidores
+
 
 
 
