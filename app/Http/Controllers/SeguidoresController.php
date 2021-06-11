@@ -47,24 +47,39 @@ class SeguidoresController extends Controller
         $usernameSeguido = $request->get('usernameSeg'); //username del que quiero seguir
 
         $follow = array(
-            "user" => $usernameSeguido
+            "user" => $usernameSeguido  //persona a quien vamos a seguir
         );
-        //insertamos la persona que seguimos a mi usuario
-        $usrpost = Usuarios::where('_id', $idUsuario)
-                        ->push('seguidos', $follow);
-        //Insertamos mi usuario a la los seguidores de la otra persona
         $followed = array(
-            "user" => $username
+            "user" => $username     //nosotros
         );
-        $usrpost2 = Usuarios::where('username', $usernameSeguido)
-                        ->push('seguidores', $followed);
 
-        return response() -> json(["message" => "Siguiendo a xxx", 
-                                    $usrpost, $usrpost2]);
         //Consultamos a la base de datos si ya seguimos a este usuario
-        // $valSegui = Usuario::where('username', $username) //buscamos en mi usuario
-        //         ->where('seguidos.user', $usernameSeguido) //si seguimos al otro usuario
-        //         ->get();
+        $valSegui = Usuarios::where('username', $username) //buscamos en mi usuario
+                ->where('seguidos.user', $usernameSeguido) //si seguimos al otro usuario
+                ->get(['seguidos.user']);
+        //Si la consulta no trae datos, significa que no lo sigo aun
+        if($valSegui ->isEmpty()){
+            //insertamos la persona que seguimos a mi usuario
+            $usrpost = Usuarios::where('_id', $idUsuario)
+                            ->push('seguidos', $follow);
+            //Insertamos mi usuario a la los seguidores de la otra persona
+
+            $usrpost2 = Usuarios::where('username', $usernameSeguido)
+                            ->push('seguidores', $followed);
+
+            $res = ['message' => 'Siguiento'];
+        }
+        else if($valSegui -> isNotEmpty()){
+            $usrpost = Usuarios::where('_id', $idUsuario)
+                            ->pull('seguidos', $follow);
+            //Insertamos mi usuario a la los seguidores de la otra persona
+
+            $usrpost2 = Usuarios::where('username', $usernameSeguido)
+                            ->pull('seguidores', $followed);
+            
+            $res = ['message' => 'Dejando de seguir'];
+        }
+        return response() -> json($res);
     }   
 
     /**
